@@ -39,11 +39,14 @@ async function initDB() {
     );
     CREATE INDEX IF NOT EXISTS idx_qs_profile ON quiz_scores(profile);
     CREATE INDEX IF NOT EXISTS idx_qs_topic   ON quiz_scores(topic_id);
-    CREATE INDEX IF NOT EXISTS idx_qs_subject ON quiz_scores(subject);
   `);
   // Add subject column to existing tables if missing (idempotent)
   await pool.query(`
     ALTER TABLE quiz_scores ADD COLUMN IF NOT EXISTS subject VARCHAR(50) NOT NULL DEFAULT 'math';
+  `);
+  // Create subject index after the column is guaranteed to exist
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_qs_subject ON quiz_scores(subject);
   `);
   console.log('DB ready');
 }
