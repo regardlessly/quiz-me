@@ -6,10 +6,26 @@ services:
     buildCommand: npm install
     startCommand: node index.js
     envVars:
-      - key: DATABASE_URL
+      - key: DB_HOST
         fromDatabase:
           name: math-portal-db
-          property: internalConnectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: math-portal-db
+          property: port
+      - key: DB_USER
+        fromDatabase:
+          name: math-portal-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: math-portal-db
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: math-portal-db
+          property: database
       - key: PARENT_TOKEN
         value: parent123   # Change this to something only you know
 

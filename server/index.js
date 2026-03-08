@@ -6,13 +6,19 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const PARENT_TOKEN = process.env.PARENT_TOKEN || 'parent123';
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  // Internal Render connections don't use SSL; external ones do
-  ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('render.com')
-    ? { rejectUnauthorized: false }
-    : false
-});
+const pool = new Pool(
+  process.env.DB_HOST ? {
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT || '5432'),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    ssl: { rejectUnauthorized: false }
+  } : {
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+  }
+);
 
 app.use(cors());
 app.use(express.json());
