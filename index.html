@@ -548,6 +548,7 @@ function buildSigFigNotes() {
 }
 
 // ==================== SIGNIFICANT FIGURES QUIZ ====================
+// Bank of 20 questions — 10 are randomly picked each attempt
 function buildSigFigQuestions() {
   return [
     {
@@ -596,7 +597,7 @@ function buildSigFigQuestions() {
       q: "How many significant figures does 10.00 have?",
       opts: ["1", "2", "3", "4"],
       ans: 3,
-      explain: "1 (non-zero), 0 (trapped between 1 and the decimal zeros), 0 (trailing after decimal), 0 (trailing after decimal). All are significant = 4 s.f."
+      explain: "1 (non-zero), 0 (trapped between the 1 and decimal zeros), and two trailing zeros after the decimal point — all significant. 10.00 has 4 s.f."
     },
     {
       q: "Round 0.009962 to 3 significant figures.",
@@ -609,11 +610,69 @@ function buildSigFigQuestions() {
       opts: ["100", "200", "250", "150"],
       ans: 1,
       explain: "78.3 ≈ 80, 21.9 ≈ 20, 0.48 ≈ 0.5. (80 + 20) ÷ 0.5 = 100 ÷ 0.5 = 200."
+    },
+    {
+      q: "How many significant figures does 0.0600 have?",
+      opts: ["1", "2", "3", "4"],
+      ans: 2,
+      explain: "Leading zeros are not significant. 6 (non-zero) and the two trailing zeros after the decimal = 3 s.f. The answer is 3."
+    },
+    {
+      q: "Round 0.06049 to 2 significant figures.",
+      opts: ["0.060", "0.061", "0.06", "0.062"],
+      ans: 0,
+      explain: "The 2 s.f. are 6 and 0. The next digit is 4 (less than 5), round down → 0.060. The trailing zero must be kept to show 2 s.f."
+    },
+    {
+      q: "How many significant figures does 400.0 have?",
+      opts: ["1", "2", "3", "4"],
+      ans: 3,
+      explain: "4 (non-zero), 0 (trapped), 0 (trapped), and the trailing 0 after the decimal point = 4 s.f."
+    },
+    {
+      q: "Estimate 0.00712 × 4800 by rounding each to 1 significant figure.",
+      opts: ["24", "35", "40", "30"],
+      ans: 1,
+      explain: "0.00712 ≈ 0.007 (1 s.f.), 4800 ≈ 5000 (1 s.f.). 0.007 × 5000 = 35."
+    },
+    {
+      q: "Round 99.96 to 3 significant figures.",
+      opts: ["99.9", "100", "99.96", "100.0"],
+      ans: 1,
+      explain: "The 3rd significant figure is the second 9. The next digit is 6 (round up) → 99.9 rounds up to 100. So the answer is 100 (which has 3 s.f. in context)."
+    },
+    {
+      q: "How many significant figures are in 0.10200?",
+      opts: ["3", "4", "5", "6"],
+      ans: 2,
+      explain: "The leading 0 is not significant. Digits: 1, 0 (trapped between 1 and 2), 2, 0 (trailing), 0 (trailing) = 5 s.f."
+    },
+    {
+      q: "A student measures a length as 3.450 m. How many significant figures is this?",
+      opts: ["3", "4", "2", "5"],
+      ans: 1,
+      explain: "3, 4, 5 are all non-zero, and the trailing 0 after the decimal point is significant (it shows precision). So 3.450 has 4 s.f."
+    },
+    {
+      q: "Round 0.003456 to 2 significant figures.",
+      opts: ["0.0035", "0.0034", "0.003", "0.00346"],
+      ans: 0,
+      explain: "Leading zeros don't count. The 2 s.f. are 3 and 4. The next digit is 5 (round up) → 0.0035."
+    },
+    {
+      q: "Estimate 312 ÷ 0.0049 by rounding to 1 significant figure.",
+      opts: ["60,000", "6,000", "600", "600,000"],
+      ans: 0,
+      explain: "312 ≈ 300, 0.0049 ≈ 0.005. 300 ÷ 0.005 = 300 ÷ (5/1000) = 300 × 200 = 60,000."
+    },
+    {
+      q: "How many significant figures does 1,000,000 have?",
+      opts: ["1", "4", "6", "7"],
+      ans: 0,
+      explain: "Trailing zeros in a whole number (without a decimal point) are not significant. 1,000,000 has only 1 s.f. (the digit 1)."
     }
   ];
 }
-
-// Answer indices verified for all questions
 
 // ==================== STATE ====================
 let currentProfile = null; // 'nathaniel' or 'isaac'
@@ -766,19 +825,29 @@ function showTopic(topicId) {
 }
 
 // ==================== QUIZ ====================
+// Fisher-Yates shuffle — unbiased, truly random ordering
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 function startQuiz(topicId) {
   const topic = TOPICS.find(t => t.id === topicId);
   if (!topic || !topic.questions) return;
 
   currentTopicId = topicId;
-  // Shuffle questions
-  const shuffled = [...topic.questions].sort(() => Math.random() - 0.5);
+  // Shuffle the full bank and pick the first 10 — fresh random set each attempt
+  const picked = shuffle(topic.questions).slice(0, 10);
   currentQuiz = {
-    questions: shuffled,
+    questions: picked,
     currentQ: 0,
-    answers: new Array(shuffled.length).fill(null),
+    answers: new Array(picked.length).fill(null),
     score: 0,
-    answered: new Array(shuffled.length).fill(false)
+    answered: new Array(picked.length).fill(false)
   };
 
   hideAllScreens();
