@@ -8,7 +8,10 @@ const PARENT_TOKEN = process.env.PARENT_TOKEN || 'parent123';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+  // Internal Render connections don't use SSL; external ones do
+  ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('render.com')
+    ? { rejectUnauthorized: false }
+    : false
 });
 
 app.use(cors());
