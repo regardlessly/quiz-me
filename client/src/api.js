@@ -6,8 +6,8 @@ export async function fetchScores(profile, subjectId = 'math') {
   return r.json()
 }
 
-export function postScore(profile, subjectId, topicId, topicTitle, score, total) {
-  fetch(`${BASE}/api/scores`, {
+export async function postScore(profile, subjectId, topicId, topicTitle, score, total) {
+  await fetch(`${BASE}/api/scores`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

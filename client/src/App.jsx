@@ -46,9 +46,9 @@ export default function App() {
     setScreen('quiz')
   }
 
-  function finishQuiz(score, total) {
+  async function finishQuiz(score, total) {
     recordScore(profile, subject.id, topicMod.meta.id, score, total)
-    postScore(profile, subject.id, topicMod.meta.id, topicMod.meta.title, score, total)
+    await postScore(profile, subject.id, topicMod.meta.id, topicMod.meta.title, score, total)
     setQuizResult({ score, total })
     setScreen('results')
   }
