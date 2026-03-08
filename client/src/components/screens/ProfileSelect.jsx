@@ -20,8 +20,8 @@ export default function ProfileSelect({ onSelect }) {
 
   return (
     <div className="profile-screen">
-      <div className="profile-title">Math Portal</div>
-      <div className="profile-subtitle">Secondary 1 G3 Mathematics – Singapore</div>
+      <div className="profile-title">Learning Portal</div>
+      <div className="profile-subtitle">Secondary 1 G3 – Singapore</div>
       <div className="profile-cards">
         {PROFILES.map(p => {
           const summary = summaries[p.name]
