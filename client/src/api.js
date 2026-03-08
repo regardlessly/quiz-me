@@ -1,4 +1,4 @@
-const BASE = 'https://math-portal-api.onrender.com'
+const BASE = 'https://math-portal-67.onrender.com'
 
 export async function fetchScores(profile, subjectId = 'math') {
   const r = await fetch(`${BASE}/api/scores/${profile}?subject=${subjectId}`)
