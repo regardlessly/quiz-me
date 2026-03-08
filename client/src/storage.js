@@ -22,15 +22,10 @@ export function recordScore(profile, subjectId, topicId, score, total) {
 }
 
 export function mergeRemoteScores(profile, subjectId, remote) {
-  const data = getData(profile, subjectId)
-  for (const [tid, remoteScore] of Object.entries(remote.scores || {})) {
-    const local = data.scores[tid]
-    if (local === undefined || remoteScore > local) data.scores[tid] = remoteScore
-  }
-  if (remote.history) {
-    for (const [tid, entries] of Object.entries(remote.history)) {
-      data.history[tid] = entries
-    }
+  // Remote DB is the source of truth — replace local scores/history entirely
+  const data = {
+    scores: remote.scores || {},
+    history: remote.history || {}
   }
   saveData(profile, subjectId, data)
   return data
