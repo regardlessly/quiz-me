@@ -17,6 +17,7 @@ export default function App() {
   const [topicMod, setTopicMod] = useState(null)
   const [quizState, setQuizState] = useState(null)
   const [quizResult, setQuizResult] = useState(null)
+  const [quizId, setQuizId] = useState(null)
 
   const accent = profile === 'nathaniel' ? 'var(--accent-n)' : 'var(--accent-i)'
 
@@ -42,13 +43,14 @@ export default function App() {
 
   function startQuiz() {
     const questions = pickQuestions(topicMod.questions, 10)
+    setQuizId(crypto.randomUUID())
     setQuizState({ questions, currentQ: 0, answers: Array(questions.length).fill(null) })
     setScreen('quiz')
   }
 
   async function finishQuiz(score, total) {
     recordScore(profile, subject.id, topicMod.meta.id, score, total)
-    await postScore(profile, subject.id, topicMod.meta.id, topicMod.meta.title, score, total)
+    await postScore(profile, subject.id, topicMod.meta.id, topicMod.meta.title, score, total, quizId)
     setQuizResult({ score, total })
     setScreen('results')
   }

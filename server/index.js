@@ -48,6 +48,14 @@ async function initDB() {
   await pool.query(`
     CREATE INDEX IF NOT EXISTS idx_qs_subject ON quiz_scores(subject);
   `);
+  // Idempotency key — prevents duplicate rows from double-clicks or retries
+  await pool.query(`
+    ALTER TABLE quiz_scores ADD COLUMN IF NOT EXISTS idempotency_key VARCHAR(100);
+  `);
+  await pool.query(`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_qs_idem ON quiz_scores(idempotency_key)
+    WHERE idempotency_key IS NOT NULL;
+  `);
   console.log('DB ready');
 }
 
@@ -56,18 +64,21 @@ async function initDB() {
 // Health check
 app.get('/health', (_, res) => res.json({ ok: true }));
 
-// POST /api/scores — save one attempt
+// POST /api/scores — save one attempt (idempotent on idempotency_key)
 app.post('/api/scores', async (req, res) => {
-  const { profile, subject = 'math', topic_id, topic_title, score, total } = req.body;
+  const { profile, subject = 'math', topic_id, topic_title, score, total, idempotency_key } = req.body;
   if (!profile || topic_id == null || score == null || total == null) {
     return res.status(400).json({ error: 'Missing fields' });
   }
   const result = await pool.query(
-    `INSERT INTO quiz_scores (profile, subject, topic_id, topic_title, score, total)
-     VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
-    [profile, subject, topic_id, topic_title || '', score, total]
+    `INSERT INTO quiz_scores (profile, subject, topic_id, topic_title, score, total, idempotency_key)
+     VALUES ($1,$2,$3,$4,$5,$6,$7)
+     ON CONFLICT (idempotency_key) WHERE idempotency_key IS NOT NULL DO NOTHING
+     RETURNING *`,
+    [profile, subject, topic_id, topic_title || '', score, total, idempotency_key || null]
   );
-  res.json(result.rows[0]);
+  // rows[0] is undefined if the row was a duplicate — return 200 either way
+  res.json(result.rows[0] || { duplicate: true });
 });
 
 // GET /api/scores/:profile?subject=math — best score + history per topic

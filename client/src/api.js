@@ -6,7 +6,7 @@ export async function fetchScores(profile, subjectId = 'math') {
   return r.json()
 }
 
-export async function postScore(profile, subjectId, topicId, topicTitle, score, total) {
+export async function postScore(profile, subjectId, topicId, topicTitle, score, total, idempotencyKey) {
   await fetch(`${BASE}/api/scores`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -16,7 +16,8 @@ export async function postScore(profile, subjectId, topicId, topicTitle, score, 
       topic_id: topicId,
       topic_title: topicTitle,
       score,
-      total
+      total,
+      idempotency_key: idempotencyKey
     })
   }).catch(() => {})
 }

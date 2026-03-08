@@ -4,6 +4,7 @@ const LETTERS = ['A', 'B', 'C', 'D']
 
 export default function Quiz({ state, setState, topic, accent, onFinish, onExit }) {
   const { questions, currentQ, answers } = state
+  const [submitting, setSubmitting] = useState(false)
   const q = questions[currentQ]
   const answered = answers[currentQ] !== null
   const isLast = currentQ === questions.length - 1
@@ -19,6 +20,8 @@ export default function Quiz({ state, setState, topic, accent, onFinish, onExit 
   function next() {
     if (!answered) return
     if (isLast) {
+      if (submitting) return          // block any second call
+      setSubmitting(true)
       const score = answers.filter((a, i) => a === questions[i].ans).length
       onFinish(score, questions.length)
     } else {
@@ -79,7 +82,7 @@ export default function Quiz({ state, setState, topic, accent, onFinish, onExit 
             className="nav-btn"
             style={{ background: answered ? 'var(--gold)' : 'var(--surface2)', color: answered ? '#000' : 'var(--text-dim)' }}
             onClick={next}
-            disabled={!answered}
+            disabled={!answered || submitting}
           >
             {isLast ? 'Submit' : 'Next'}
           </button>
