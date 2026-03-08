@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: math-portal-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: math-portal-db
+          property: connectionString
+      - key: PARENT_TOKEN
+        value: parent123   # Change this to something only you know
+
+databases:
+  - name: math-portal-db
+    databaseName: math_portal
+    user: math_portal

@@ -376,6 +376,10 @@
 </div>
 
 <script>
+// ==================== API CONFIG ====================
+// Update this URL after deploying to Render
+const API_URL = 'https://math-portal-api.onrender.com';
+
 // ==================== DATA ====================
 const TOPICS = [
   {
@@ -872,6 +876,26 @@ function showDashboard() {
   document.getElementById('mainHeader').classList.remove('hidden');
   document.getElementById('dashboardScreen').classList.remove('hidden');
   renderDashboard();
+  // Fetch latest scores from DB and re-render (merge with local)
+  fetch(API_URL + '/api/scores/' + currentProfile)
+    .then(r => r.json())
+    .then(remote => {
+      const data = getData();
+      // Merge: remote best scores win if higher
+      for (const [tid, remoteScore] of Object.entries(remote.scores || {})) {
+        const local = data.scores[tid];
+        if (local === undefined || remoteScore > local) data.scores[tid] = remoteScore;
+      }
+      // Merge history: replace local with remote (remote is authoritative)
+      if (remote.history) {
+        for (const [tid, entries] of Object.entries(remote.history)) {
+          data.history[tid] = entries;
+        }
+      }
+      saveData(data);
+      renderDashboard();
+    })
+    .catch(() => {}); // silently ignore if offline
 }
 
 function renderDashboard() {
@@ -1091,23 +1115,29 @@ function showResults() {
   const pct = Math.round(score / total * 100);
   const accent = currentProfile === 'nathaniel' ? 'var(--accent-n)' : 'var(--accent-i)';
 
-  // Save score
+  // Save score locally
   const data = getData();
   if (!data.scores) data.scores = {};
   if (!data.history) data.history = {};
   if (!data.history[currentTopicId]) data.history[currentTopicId] = [];
-
-  // Keep best score
   const prev = data.scores[currentTopicId];
-  if (prev === undefined || score > prev) {
-    data.scores[currentTopicId] = score;
-  }
-  data.history[currentTopicId].push({
-    score: score,
-    date: new Date().toISOString(),
-    total: total
-  });
+  if (prev === undefined || score > prev) data.scores[currentTopicId] = score;
+  data.history[currentTopicId].push({ score, date: new Date().toISOString(), total });
   saveData(data);
+
+  // Also persist to database (fire-and-forget)
+  const topic = TOPICS.find(t => t.id === currentTopicId);
+  fetch(API_URL + '/api/scores', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      profile: currentProfile,
+      topic_id: currentTopicId,
+      topic_title: topic ? topic.title : '',
+      score,
+      total
+    })
+  }).catch(() => {}); // silently ignore if offline
 
   let color = score >= 8 ? 'var(--green)' : score >= 5 ? 'var(--yellow)' : 'var(--red)';
   let msg = score === 10 ? 'Perfect Score!' : score >= 8 ? 'Great Job!' : score >= 5 ? 'Good Effort!' : 'Keep Practising!';
