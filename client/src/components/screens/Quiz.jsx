@@ -77,7 +77,7 @@ export default function Quiz({ state, setState, topic, accent, onFinish, onExit 
         <div className="quiz-nav">
           <button
             className="nav-btn"
-            style={{ background: answered ? accent : 'var(--surface2)', color: answered ? '#fff' : 'var(--text-dim)' }}
+            style={{ background: answered ? 'var(--gold)' : 'var(--surface2)', color: answered ? '#000' : 'var(--text-dim)' }}
             onClick={next}
             disabled={!answered}
           >
