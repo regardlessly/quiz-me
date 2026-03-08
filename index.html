@@ -632,6 +632,13 @@ function buildSigFigQuestions() {
     { q:"Round 9.9996 to 3 d.p.", opts:["9.999","10.000","9.9996","10.0"], ans:1, explain:"3 d.p.: 9.999. Next digit 6 ≥ 5, round up → 10.000." },
     { q:"Round 1.2349 to 2 d.p.", opts:["1.23","1.24","1.2","1.235"], ans:0, explain:"2 d.p.: 1.23. Next digit 4 < 5, round down → 1.23." },
 
+    { q:"Round 0.07777 to 2 d.p.", opts:["0.07","0.08","0.077","0.078"], ans:1, explain:"2 d.p.: 0.07. Next digit 7 ≥ 5, round up → 0.08." },
+    { q:"Round 14.0050 to 2 d.p.", opts:["14.00","14.01","14.0","14.005"], ans:1, explain:"2 d.p.: 14.00. Next digit 5 ≥ 5, round up → 14.01." },
+    { q:"Round 3.9951 to 1 d.p.", opts:["3.9","4.0","3.99","4.00"], ans:1, explain:"1 d.p.: 3.9. Next digit 9 ≥ 5, round up → 4.0." },
+    { q:"Round 0.00450 to 3 d.p.", opts:["0.004","0.005","0.0045","0.00450"], ans:1, explain:"3 d.p.: 0.004. Next digit 5 ≥ 5, round up → 0.005." },
+    { q:"Round 267.449 to 1 d.p.", opts:["267.4","267.5","267.44","267.45"], ans:0, explain:"1 d.p.: 267.4. Next digit 4 < 5, round down → 267.4." },
+    { q:"Round 0.09951 to 2 d.p.", opts:["0.09","0.10","0.099","0.100"], ans:1, explain:"2 d.p.: 0.09. Next digit 9 ≥ 5, round up → 0.10." },
+
     // --- ESTIMATION (1 S.F.) ---
     { q:"Estimate 589 × 0.032 using 1 s.f.", opts:["18","15","20","12"], ans:0, explain:"600 × 0.03 = 18." },
     { q:"Estimate (78.3 + 21.9) ÷ 0.48 using 1 s.f.", opts:["100","200","250","150"], ans:1, explain:"80 + 20 = 100; 100 ÷ 0.5 = 200." },
@@ -653,6 +660,16 @@ function buildSigFigQuestions() {
     { q:"Estimate 3,140 × 0.00078 using 1 s.f.", opts:["2.4","24","0.24","240"], ans:0, explain:"3000 × 0.0008 = 2.4." },
     { q:"Estimate (211 – 89) ÷ 0.601 using 1 s.f.", opts:["200","20","2000","2"], ans:0, explain:"211 ≈ 200, 89 ≈ 90, 0.601 ≈ 0.6. (200 – 90) ÷ 0.6 = 110 ÷ 0.6 ≈ 200." },
     { q:"Estimate 0.0052 × 0.0078 using 1 s.f.", opts:["0.000040","0.00004","0.0004","0.04"], ans:1, explain:"0.005 × 0.008 = 0.00004." },
+
+    { q:"Estimate 0.00031 × 64,000 using 1 s.f.", opts:["18","20","16","2"], ans:1, explain:"0.0003 × 60,000 = 18 ≈ 20." },
+    { q:"Estimate 9,870 ÷ 0.197 using 1 s.f.", opts:["5,000","50,000","500","500,000"], ans:1, explain:"10,000 ÷ 0.2 = 50,000." },
+    { q:"Estimate 0.472 × 0.0059 using 1 s.f.", opts:["0.003","0.03","0.3","0.0003"], ans:0, explain:"0.5 × 0.006 = 0.003." },
+    { q:"Estimate (3.87² ) using 1 s.f.", opts:["9","12","16","20"], ans:2, explain:"4² = 16." },
+    { q:"Estimate 4,850 × 0.021 using 1 s.f.", opts:["100","10","1,000","50"], ans:0, explain:"5,000 × 0.02 = 100." },
+    { q:"Estimate 0.00829 ÷ 0.00041 using 1 s.f.", opts:["2","20","200","0.2"], ans:1, explain:"0.008 ÷ 0.0004 = 20." },
+    { q:"Estimate 678 × 0.0000052 using 1 s.f.", opts:["0.0035","0.035","0.35","3.5"], ans:0, explain:"700 × 0.000005 = 0.0035." },
+    { q:"Estimate (0.0051 + 0.0049) × 8,800 using 1 s.f.", opts:["80","8","800","0.8"], ans:0, explain:"(0.005 + 0.005) = 0.01; 0.01 × 9000 = 90 ≈ 80." },
+    { q:"Estimate 52.3 ÷ 0.0046 using 1 s.f.", opts:["10,000","1,000","100,000","100"], ans:0, explain:"50 ÷ 0.005 = 10,000." },
 
     // --- MIXED APPLICATION ---
     { q:"Which of these has 4 significant figures?", opts:["3,700","0.0370","37.00","370"], ans:2, explain:"37.00 has 4 s.f.: 3, 7, 0 (trailing after decimal), 0 (trailing). The others each have 2 or 3." },
@@ -684,7 +701,17 @@ function buildSigFigQuestions() {
     { q:"Round 1.0995 to 3 s.f.", opts:["1.09","1.10","1.099","1.1"], ans:1, explain:"3 s.f.: 1, 0, 9. Next digit 9 ≥ 5 → round up: 1.10." },
     { q:"How many s.f. in 4.000 × 10²?", opts:["1","2","3","4"], ans:3, explain:"4.000 has 4 s.f. (4, and three trailing zeros after the decimal)." },
     { q:"Round 0.050505 to 3 s.f.", opts:["0.0505","0.0506","0.051","0.05050"], ans:0, explain:"3 s.f.: 5, 0, 5. Next digit 0 < 5 → 0.0505." },
-    { q:"A wire measures 24.65 cm. Round to 3 s.f.", opts:["24.6 cm","24.7 cm","24.65 cm","25.0 cm"], ans:1, explain:"3 s.f.: 2, 4, 6. Next digit 5 ≥ 5 → 24.7 cm." }
+    { q:"A wire measures 24.65 cm. Round to 3 s.f.", opts:["24.6 cm","24.7 cm","24.65 cm","25.0 cm"], ans:1, explain:"3 s.f.: 2, 4, 6. Next digit 5 ≥ 5 → 24.7 cm." },
+    { q:"Which of these numbers has exactly 3 s.f.?", opts:["0.0030","4,500","8.010","0.310"], ans:3, explain:"0.310: 3, 1, 0 (trailing after decimal) = 3 s.f. ✓" },
+    { q:"Round 0.001505 to 3 s.f.", opts:["0.00150","0.00151","0.0015","0.001505"], ans:1, explain:"3 s.f.: 1, 5, 0. Next digit 5 ≥ 5, round up → 0.00151." },
+    { q:"A thermometer reads 36.850°C. Round to 4 s.f.", opts:["36.85°C","36.9°C","36.86°C","37.0°C"], ans:0, explain:"4 s.f.: 3, 6, 8, 5. Next digit 0 < 5, round down → 36.85°C." },
+    { q:"How many s.f. in 0.090090?", opts:["3","4","5","6"], ans:2, explain:"Leading zeros not significant. 9, 0 (trapped), 0 (trapped), 9, 0 (trailing) = 5 s.f." },
+    { q:"Round 49,950 to 3 s.f.", opts:["49,900","50,000","49,950","49,000"], ans:1, explain:"3 s.f.: 4, 9, 9. Next digit 5 ≥ 5, round up → 50,000." },
+    { q:"Estimate (0.0512)² using 1 s.f.", opts:["0.002","0.003","0.025","0.0025"], ans:3, explain:"(0.05)² = 0.0025." },
+    { q:"A brick is 0.2405 m long. Round to 2 s.f.", opts:["0.24 m","0.241 m","0.25 m","0.2 m"], ans:0, explain:"2 s.f.: 2, 4. Next digit 0 < 5, round down → 0.24 m." },
+    { q:"How many s.f. does 80,080 have?", opts:["2","3","4","5"], ans:2, explain:"8, 0 (trapped), 0 (trapped), 8 = 4 s.f. The final zero is trailing in a whole number and not significant." },
+    { q:"Round 0.050950 to 3 s.f.", opts:["0.0509","0.0510","0.051","0.05095"], ans:1, explain:"3 s.f.: 5, 0, 9. Next digit 5 ≥ 5, round up → 0.0510." },
+    { q:"Which value is 0.006241 rounded to 2 s.f.?", opts:["0.0062","0.0063","0.006","0.00624"], ans:0, explain:"2 s.f.: 6, 2. Next digit 4 < 5, round down → 0.0062." }
   ];
 }
 
