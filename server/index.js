@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { Pool } = require('pg');
 
 const app = express();
@@ -205,6 +206,13 @@ app.get('/parent', async (req, res) => {
   <a class="refresh" href="?token=${PARENT_TOKEN}">↻ Refresh</a>
 </body>
 </html>`);
+});
+
+// ── Serve React client (production) ──────────────────────────────────────────
+const clientDist = path.join(__dirname, '../client/dist');
+app.use(express.static(clientDist));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientDist, 'index.html'));
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
