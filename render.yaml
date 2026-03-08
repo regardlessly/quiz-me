@@ -1,4 +1,10 @@
 services:
+  - type: static
+    name: math-portal-client
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+
   - type: web
     name: math-portal-api
     runtime: node

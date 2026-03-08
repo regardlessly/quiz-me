@@ -27,16 +27,22 @@ app.use(express.json());
 async function initDB() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quiz_scores (
-      id         SERIAL PRIMARY KEY,
-      profile    VARCHAR(20)  NOT NULL,
-      topic_id   INTEGER      NOT NULL,
+      id          SERIAL PRIMARY KEY,
+      profile     VARCHAR(20)  NOT NULL,
+      subject     VARCHAR(50)  NOT NULL DEFAULT 'math',
+      topic_id    INTEGER      NOT NULL,
       topic_title VARCHAR(100),
-      score      INTEGER      NOT NULL,
-      total      INTEGER      NOT NULL,
-      created_at TIMESTAMPTZ  DEFAULT NOW()
+      score       INTEGER      NOT NULL,
+      total       INTEGER      NOT NULL,
+      created_at  TIMESTAMPTZ  DEFAULT NOW()
     );
     CREATE INDEX IF NOT EXISTS idx_qs_profile ON quiz_scores(profile);
     CREATE INDEX IF NOT EXISTS idx_qs_topic   ON quiz_scores(topic_id);
+    CREATE INDEX IF NOT EXISTS idx_qs_subject ON quiz_scores(subject);
+  `);
+  // Add subject column to existing tables if missing (idempotent)
+  await pool.query(`
+    ALTER TABLE quiz_scores ADD COLUMN IF NOT EXISTS subject VARCHAR(50) NOT NULL DEFAULT 'math';
   `);
   console.log('DB ready');
 }
@@ -48,25 +54,26 @@ app.get('/health', (_, res) => res.json({ ok: true }));
 
 // POST /api/scores — save one attempt
 app.post('/api/scores', async (req, res) => {
-  const { profile, topic_id, topic_title, score, total } = req.body;
+  const { profile, subject = 'math', topic_id, topic_title, score, total } = req.body;
   if (!profile || topic_id == null || score == null || total == null) {
     return res.status(400).json({ error: 'Missing fields' });
   }
   const result = await pool.query(
-    `INSERT INTO quiz_scores (profile, topic_id, topic_title, score, total)
-     VALUES ($1,$2,$3,$4,$5) RETURNING *`,
-    [profile, topic_id, topic_title || '', score, total]
+    `INSERT INTO quiz_scores (profile, subject, topic_id, topic_title, score, total)
+     VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
+    [profile, subject, topic_id, topic_title || '', score, total]
   );
   res.json(result.rows[0]);
 });
 
-// GET /api/scores/:profile — best score + history per topic
+// GET /api/scores/:profile?subject=math — best score + history per topic
 app.get('/api/scores/:profile', async (req, res) => {
   const { profile } = req.params;
+  const subject = req.query.subject || 'math';
   const rows = await pool.query(
     `SELECT topic_id, score, total, created_at FROM quiz_scores
-     WHERE profile = $1 ORDER BY created_at ASC`,
-    [profile]
+     WHERE profile = $1 AND subject = $2 ORDER BY created_at ASC`,
+    [profile, subject]
   );
 
   const best = {};
@@ -87,24 +94,25 @@ app.get('/parent', async (req, res) => {
   }
 
   const rows = await pool.query(
-    `SELECT profile, topic_id, topic_title, score, total, created_at
+    `SELECT profile, subject, topic_id, topic_title, score, total, created_at
      FROM quiz_scores ORDER BY created_at DESC`
   );
 
   const profiles = ['nathaniel', 'isaac'];
   const colors = { nathaniel: '#4a9eff', isaac: '#ff8c42' };
 
-  // Build per-profile summaries
   function buildSummary(profile) {
     const attempts = rows.rows.filter(r => r.profile === profile);
-    const byTopic = {};
+    const bySubjectTopic = {};
     for (const a of attempts) {
-      const tid = a.topic_id;
-      if (!byTopic[tid]) byTopic[tid] = { title: a.topic_title || `Topic ${tid}`, attempts: [], best: 0 };
-      byTopic[tid].attempts.push(a);
-      if (a.score > byTopic[tid].best) byTopic[tid].best = a.score;
+      const key = `${a.subject}:${a.topic_id}`;
+      if (!bySubjectTopic[key]) bySubjectTopic[key] = {
+        subject: a.subject, title: a.topic_title || `Topic ${a.topic_id}`, attempts: [], best: 0
+      };
+      bySubjectTopic[key].attempts.push(a);
+      if (a.score > bySubjectTopic[key].best) bySubjectTopic[key].best = a.score;
     }
-    return { attempts, byTopic };
+    return { attempts, bySubjectTopic };
   }
 
   const summaries = {};
@@ -120,12 +128,12 @@ app.get('/parent', async (req, res) => {
   }
 
   const topicSections = profiles.map(profile => {
-    const { byTopic } = summaries[profile];
+    const { bySubjectTopic } = summaries[profile];
     const color = colors[profile];
     const name = profile.charAt(0).toUpperCase() + profile.slice(1);
-    const topicRows = Object.entries(byTopic).sort(([a],[b]) => a - b).map(([tid, t]) => `
+    const topicRows = Object.entries(bySubjectTopic).sort().map(([key, t]) => `
       <tr>
-        <td>${t.title}</td>
+        <td><span style="opacity:0.5;font-size:11px">${t.subject}</span><br>${t.title}</td>
         <td style="text-align:center">${badge(t.best, t.attempts[0].total)}</td>
         <td style="text-align:center">${t.attempts.length}</td>
         <td style="text-align:center">${new Date(t.attempts[t.attempts.length-1].created_at).toLocaleDateString('en-SG',{day:'numeric',month:'short',year:'numeric'})}</td>
@@ -134,7 +142,7 @@ app.get('/parent', async (req, res) => {
     return `
       <div class="card">
         <h2 style="color:${color}">${name}</h2>
-        ${Object.keys(byTopic).length === 0
+        ${Object.keys(bySubjectTopic).length === 0
           ? '<p style="opacity:0.5">No attempts yet.</p>'
           : `<table>
               <thead><tr><th>Topic</th><th>Best Score</th><th>Attempts</th><th>Last Played</th></tr></thead>
@@ -150,7 +158,7 @@ app.get('/parent', async (req, res) => {
     return `<tr>
       <td>${dt.toLocaleDateString('en-SG',{day:'numeric',month:'short'})} ${dt.toLocaleTimeString('en-SG',{hour:'2-digit',minute:'2-digit'})}</td>
       <td style="color:${color};font-weight:600">${name}</td>
-      <td>${r.topic_title || `Topic ${r.topic_id}`}</td>
+      <td>${r.subject ? `<span style="opacity:0.5">${r.subject}/</span>` : ''}${r.topic_title || `Topic ${r.topic_id}`}</td>
       <td>${badge(r.score, r.total)}</td>
     </tr>`;
   }).join('');
