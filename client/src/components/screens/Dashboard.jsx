@@ -35,7 +35,7 @@ export default function Dashboard({ profile, subject, accent, onSelectTopic, onS
   return (
     <div style={{ '--accent': accent }}>
       <header className="app-header">
-        <div className="logo">Math Portal <span>/ Sec 1 G3</span></div>
+        <div className="logo">{subject.title} <span>/ {subject.subtitle || 'Sec 1 G3'}</span></div>
         <div className="header-right">
           <div className="profile-badge" onClick={onSwitchProfile}>
             <div className="avatar" style={{ background: accent }}>{display[0]}</div>

@@ -222,6 +222,53 @@ app.get('/parent', async (req, res) => {
 </html>`);
 });
 
+// ── POST /api/chat — topic-specific AI tutor via DeepSeek ────────────────────
+app.post('/api/chat', async (req, res) => {
+  const { subject, topicTitle, message, history = [] } = req.body;
+  if (!message) return res.status(400).json({ error: 'Missing message' });
+
+  const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
+  if (!DEEPSEEK_API_KEY) return res.status(500).json({ error: 'Chat not configured' });
+
+  const systemPrompt = `You are a fun, relatable tutor helping a 13-year-old Singapore secondary school boy understand "${topicTitle}" in ${subject || 'science'}.
+
+Rules:
+- ONLY answer questions about "${topicTitle}". If they ask about something unrelated, say "eh that one not my area lah, ask your teacher" and redirect back.
+- Keep responses SHORT — max 3 sentences. Be snappy.
+- Use Singapore Gen Z / Singlish slang NATURALLY: "lah", "lor", "meh", "sian", "sibei", "confirm plus chop", "shiok", "aiyah", "gg", "W", "lowkey", "no cap", "frfr", "on", "slap", "bro", "eh", "wah"
+- Be encouraging and hype them up when they get something right
+- Explain concepts simply — no jargon unless you're explaining it
+- Use emojis sparingly (1-2 max per response)`;
+
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...history.slice(-10).map(h => ({ role: h.role, content: h.content })),
+    { role: 'user', content: message }
+  ];
+
+  try {
+    const response = await fetch('https://api.deepseek.com/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages,
+        max_tokens: 200,
+        temperature: 0.85
+      })
+    });
+    const data = await response.json();
+    const reply = data.choices?.[0]?.message?.content || 'Aiyah, something went wrong lah. Try again?';
+    res.json({ reply });
+  } catch (err) {
+    console.error('DeepSeek error:', err);
+    res.status(500).json({ reply: 'Connection drop sia 😵 Try again lah!' });
+  }
+});
+
 // ── Serve React client (production) ──────────────────────────────────────────
 const clientDist = path.join(__dirname, '../client/dist');
 app.use(express.static(clientDist));

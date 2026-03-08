@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { getData } from '../../storage'
 import HistoryModal from '../ui/HistoryModal'
+import TopicChat from '../ui/TopicChat'
 
 export default function TopicDetail({ topic, profile, subject, accent, onStartQuiz, onBack }) {
   const [showHistory, setShowHistory] = useState(false)
@@ -16,7 +17,9 @@ export default function TopicDetail({ topic, profile, subject, accent, onStartQu
   return (
     <div style={{ '--accent': accent }}>
       <header className="app-header">
-        <div className="logo">Math Portal <span>/ Sec 1 G3</span></div>
+        <div className="logo">
+          {subject.title} <span>/ {subject.subtitle || 'Sec 1 G3'}</span>
+        </div>
         <div className="header-right">
           <div className="profile-badge">
             <div className="avatar" style={{ background: accent }}>{display[0]}</div>
@@ -61,6 +64,8 @@ export default function TopicDetail({ topic, profile, subject, accent, onStartQu
           onClose={() => setShowHistory(false)}
         />
       )}
+
+      <TopicChat topic={topic} subject={subject} accent={accent} />
     </div>
   )
 }

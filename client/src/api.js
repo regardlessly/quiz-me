@@ -6,6 +6,16 @@ export async function fetchScores(profile, subjectId = 'math') {
   return r.json()
 }
 
+export async function chatWithTutor(subjectId, topicTitle, message, history = []) {
+  const r = await fetch(`${BASE}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ subject: subjectId, topicTitle, message, history })
+  })
+  if (!r.ok) throw new Error('chat failed')
+  return r.json()
+}
+
 export async function postScore(profile, subjectId, topicId, topicTitle, score, total, idempotencyKey) {
   await fetch(`${BASE}/api/scores`, {
     method: 'POST',
