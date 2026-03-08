@@ -795,8 +795,8 @@ function renderDashboard() {
   const scores = data.scores || {};
   const completed = Object.keys(scores).length;
   const allScores = Object.values(scores);
-  const avg = allScores.length > 0 ? Math.round(allScores.reduce((a,b) => a + b, 0) / allScores.length / 20 * 100) : '-';
-  const perfect = allScores.filter(s => s === 20).length;
+  const avg = allScores.length > 0 ? Math.round(allScores.reduce((a,b) => a + b, 0) / allScores.length / 10 * 100) : '-';
+  const perfect = allScores.filter(s => s === 10).length;
 
   document.getElementById('statCompleted').textContent = completed;
   document.getElementById('statAvgScore').textContent = avg === '-' ? '-' : avg + '%';
@@ -821,7 +821,7 @@ function renderDashboard() {
         <h4>${t.title}</h4>
         <p>${t.desc}${!hasContent ? ' &mdash; Coming Soon' : ''}</p>
       </div>
-      ${isCompleted ? `<div class="topic-score ${score === 20 ? 'perfect' : ''}">${score}/20</div>` : hasContent ? '<div class="topic-score" style="color:' + accent + '">Start &rarr;</div>' : ''}
+      ${isCompleted ? `<div class="topic-score ${score === 10 ? 'perfect' : ''}">${score}/10</div>` : hasContent ? '<div class="topic-score" style="color:' + accent + '">Start &rarr;</div>' : ''}
     `;
     if (hasContent) {
       row.onclick = () => showTopic(t.id);
@@ -850,7 +850,7 @@ function showTopic(topicId) {
   let historyBtn = '';
   if (history && history.length > 0) {
     historyBtn = `<button onclick="showHistory(${topicId})" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:12px 20px;border-radius:10px;font-size:14px;cursor:pointer;margin-bottom:12px;width:100%;">
-      View Past Attempts (${history.length}) ${bestScore !== undefined ? '&mdash; Best: ' + bestScore + '/20' : ''}
+      View Past Attempts (${history.length}) ${bestScore !== undefined ? '&mdash; Best: ' + bestScore + '/10' : ''}
     </button>`;
   }
 
@@ -858,7 +858,7 @@ function showTopic(topicId) {
     ${topic.notes}
     ${historyBtn}
     <button class="start-quiz-btn" style="background:${accent}" onclick="startQuiz(${topicId})">
-      ${bestScore !== undefined ? 'Retake Quiz' : 'Start Quiz'} (20 Questions)
+      ${bestScore !== undefined ? 'Retake Quiz' : 'Start Quiz'} (10 Questions)
     </button>
   `;
 
@@ -882,7 +882,7 @@ function startQuiz(topicId) {
 
   currentTopicId = topicId;
   // Shuffle the full bank and pick the first 20 — fresh random set each attempt
-  const picked = shuffle(topic.questions).slice(0, 20);
+  const picked = shuffle(topic.questions).slice(0, 10);
   currentQuiz = {
     questions: picked,
     currentQ: 0,
@@ -1016,9 +1016,9 @@ function showResults() {
   });
   saveData(data);
 
-  let color = score >= 16 ? 'var(--green)' : score >= 10 ? 'var(--yellow)' : 'var(--red)';
-  let msg = score === 20 ? 'Perfect Score!' : score >= 16 ? 'Great Job!' : score >= 10 ? 'Good Effort!' : 'Keep Practising!';
-  let sub = score === 20 ? 'You nailed every question!' : score >= 16 ? 'Almost perfect - well done!' : score >= 10 ? 'You\'re getting there. Review the notes and try again.' : 'Review the concept notes and give it another shot.';
+  let color = score >= 8 ? 'var(--green)' : score >= 5 ? 'var(--yellow)' : 'var(--red)';
+  let msg = score === 10 ? 'Perfect Score!' : score >= 8 ? 'Great Job!' : score >= 5 ? 'Good Effort!' : 'Keep Practising!';
+  let sub = score === 10 ? 'You nailed every question!' : score >= 8 ? 'Almost perfect - well done!' : score >= 5 ? 'You\'re getting there. Review the notes and try again.' : 'Review the concept notes and give it another shot.';
 
   hideAllScreens();
   document.getElementById('mainHeader').classList.remove('hidden');
@@ -1055,7 +1055,7 @@ function showHistory(topicId) {
       const d = new Date(h.date);
       const dateStr = d.toLocaleDateString('en-SG', { day: 'numeric', month: 'short', year: 'numeric' });
       const timeStr = d.toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit' });
-      const color = h.score >= 16 ? 'var(--green)' : h.score >= 10 ? 'var(--yellow)' : 'var(--red)';
+      const color = h.score >= 8 ? 'var(--green)' : h.score >= 5 ? 'var(--yellow)' : 'var(--red)';
       return `<div class="history-item">
         <div>
           <div>Attempt ${history.length - i}</div>
