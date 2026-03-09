@@ -8,78 +8,116 @@ export const notes = `
 <h2>Scientific Endeavour</h2>
 <p class="topic-desc">Scientific method · Variables · Lab safety · GHS symbols · Bunsen burner · SI units · Accuracy &amp; precision · Errors · Speed</p>
 
-<h3>1. The Scientific Method</h3>
-<p>The correct order: <strong>Observation → Question → Hypothesis → Experiment → Data collection → Analysis → Conclusion → Communication</strong></p>
-<ul>
-  <li><strong>Hypothesis</strong>: A tentative, testable explanation for an observation. Not yet proven. Format: <em>"If [IV] increases, then [DV] will increase/decrease because…"</em></li>
-  <li><strong>Fair test</strong>: Only ONE variable (the IV) is changed; all others (CVs) are kept constant.</li>
-  <li><strong>Control group</strong>: Receives no treatment; serves as a baseline for comparison.</li>
-  <li><strong>Anomalous result (outlier)</strong>: A result far from other values. Investigate, then exclude from the mean if due to error.</li>
-  <li><strong>Peer review</strong>: Other experts evaluate a scientist's work before publication — ensures quality and reliability.</li>
-  <li><strong>Reproducibility</strong>: Independent scientists using the same method obtain similar results.</li>
-</ul>
+<div class="notes-card">
+  <h3>1. The Scientific Method</h3>
+  <div class="example">
+    <strong>Observation → Question → Hypothesis → Experiment → Data collection → Analysis → Conclusion → Communication</strong>
+  </div>
+  <ul>
+    <li><strong>Hypothesis</strong>: A tentative, testable explanation for an observation. Not yet proven.<br>Format: <em>"If [IV] increases, then [DV] will increase/decrease because…"</em></li>
+    <li><strong>Fair test</strong>: Only ONE variable (the IV) is changed; all others (CVs) are kept constant.</li>
+    <li><strong>Control group</strong>: Receives no treatment — serves as a baseline for comparison.</li>
+    <li><strong>Anomalous result (outlier)</strong>: A result far from other values. Investigate, then exclude from the mean if due to error.</li>
+    <li><strong>Peer review</strong>: Other experts evaluate a scientist's work before publication — ensures quality.</li>
+    <li><strong>Reproducibility</strong>: Independent scientists using the same method obtain similar results.</li>
+  </ul>
+</div>
 
-<h3>2. Variables</h3>
-<table>
-  <tr><th>Variable</th><th>Definition</th><th>Axis (graph)</th></tr>
-  <tr><td><strong>Independent (IV)</strong></td><td>Deliberately changed by the scientist</td><td>x-axis</td></tr>
-  <tr><td><strong>Dependent (DV)</strong></td><td>Measured; responds to the IV (also called "responding variable")</td><td>y-axis</td></tr>
-  <tr><td><strong>Controlled (CV)</strong></td><td>Kept constant to ensure a fair test</td><td>—</td></tr>
-</table>
+<div class="notes-card">
+  <h3>2. Variables</h3>
+  <table>
+    <tr><th>Variable</th><th>Definition</th><th>Graph axis</th></tr>
+    <tr><td><strong>Independent (IV)</strong></td><td>Deliberately changed by the scientist</td><td>x-axis</td></tr>
+    <tr><td><strong>Dependent (DV)</strong></td><td>Measured; responds to the IV ("responding variable")</td><td>y-axis</td></tr>
+    <tr><td><strong>Controlled (CV)</strong></td><td>Kept constant to ensure a fair test</td><td>—</td></tr>
+  </table>
+</div>
 
-<h3>3. Accuracy, Precision &amp; Errors</h3>
-<ul>
-  <li><strong>Accuracy</strong>: How close a measurement is to the <em>true value</em>.</li>
-  <li><strong>Precision</strong>: How close repeated measurements are to <em>each other</em>.</li>
-  <li><strong>Systematic error</strong>: Consistent error that shifts all readings in the same direction (e.g., zero error, uncalibrated instrument). Affects accuracy.</li>
-  <li><strong>Random error</strong>: Unpredictable variation causing scatter in readings. Affects precision.</li>
-  <li><strong>Zero error</strong>: Instrument doesn't read zero when it should. Corrected reading = displayed reading − zero error.</li>
-  <li><strong>Parallax error</strong>: Eye not level with the scale. Avoid by reading at eye level, perpendicular to the scale.</li>
-  <li><strong>Uncertainty</strong> = ± ½ × smallest division.</li>
-</ul>
+<div class="notes-card">
+  <h3>3. Accuracy, Precision &amp; Errors</h3>
+  <ul>
+    <li><strong>Accuracy</strong>: How close a measurement is to the <em>true value</em>.</li>
+    <li><strong>Precision</strong>: How close repeated measurements are to <em>each other</em>.</li>
+    <li><strong>Systematic error</strong>: Consistent, repeatable error shifting all readings one way (e.g., zero error). Affects <em>accuracy</em>.</li>
+    <li><strong>Random error</strong>: Unpredictable variation causing scatter. Affects <em>precision</em>.</li>
+    <li><strong>Zero error</strong>: Instrument doesn't read zero when it should.<br>Corrected reading = displayed reading − zero error.</li>
+    <li><strong>Parallax error</strong>: Eye not level with the scale — avoid by reading at eye level, perpendicular to the scale.</li>
+    <li><strong>Uncertainty</strong> = ± ½ × smallest division.</li>
+  </ul>
+  <div class="example">
+    <strong>Example:</strong> True mass = 50 g. Student records 45.1, 45.2, 45.3 g → <em>precise</em> (close to each other) but <em>not accurate</em> (far from 50 g).
+  </div>
+</div>
 
-<h3>4. Laboratory Safety &amp; GHS Symbols</h3>
-<table>
-  <tr><th>Symbol</th><th>Hazard</th></tr>
-  <tr><td>🔥 Flame</td><td>Flammable</td></tr>
-  <tr><td>☠ Skull &amp; crossbones</td><td>Acute toxicity</td></tr>
-  <tr><td>⚗ Corroding surface</td><td>Corrosive</td></tr>
-  <tr><td>❗ Exclamation mark</td><td>Irritant / harmful</td></tr>
-  <tr><td>🔥 Flame over circle</td><td>Oxidising</td></tr>
-</table>
-<p>Key rules: wear safety goggles at all times; waft — never sniff directly; tie back long hair; no eating/drinking; know where safety equipment is.</p>
-<p>Acid on skin: rinse immediately with large amounts of running water for ≥10–15 min; inform teacher.</p>
+<div class="notes-card">
+  <h3>4. Laboratory Safety &amp; GHS Symbols</h3>
+  <table>
+    <tr><th>GHS Symbol</th><th>Hazard</th></tr>
+    <tr><td>🔥 Flame</td><td>Flammable</td></tr>
+    <tr><td>💀 Skull &amp; crossbones</td><td>Acute toxicity</td></tr>
+    <tr><td>⚗ Corroding surface</td><td>Corrosive</td></tr>
+    <tr><td>❗ Exclamation mark</td><td>Irritant / harmful</td></tr>
+    <tr><td>🔥 Flame over circle</td><td>Oxidising</td></tr>
+  </table>
+  <ul>
+    <li>Wear safety goggles at all times.</li>
+    <li>Waft chemicals — never sniff directly.</li>
+    <li>Tie back long hair near flames.</li>
+    <li>No eating or drinking in the lab.</li>
+    <li>Know the location of fire extinguisher and eye-wash station.</li>
+  </ul>
+  <div class="example">
+    <strong>Acid on skin:</strong> Rinse immediately with large amounts of running water for ≥10–15 min. Inform teacher. Do NOT neutralise with another chemical.
+  </div>
+</div>
 
-<h3>5. Bunsen Burner Flames</h3>
-<table>
-  <tr><th>Flame</th><th>Air hole</th><th>Colour</th><th>Temperature</th><th>Use</th></tr>
-  <tr><td>Luminous</td><td>Closed</td><td>Yellow/orange</td><td>Cooler</td><td>Safety flame (not heating)</td></tr>
-  <tr><td>Non-luminous</td><td>Open</td><td>Blue</td><td>Hotter</td><td>Heating</td></tr>
-</table>
-<p>When heating a liquid in a test tube: point the mouth <strong>away from people</strong>, use a test tube holder, heat gently and intermittently, swirl to distribute heat.</p>
+<div class="notes-card">
+  <h3>5. Bunsen Burner Flames</h3>
+  <table>
+    <tr><th>Flame</th><th>Air hole</th><th>Colour</th><th>Temp</th><th>Use</th></tr>
+    <tr><td>Luminous</td><td>Closed</td><td>Yellow/orange</td><td>Cooler</td><td>Safety flame</td></tr>
+    <tr><td>Non-luminous</td><td>Open</td><td>Blue</td><td>Hotter</td><td>Heating</td></tr>
+  </table>
+  <p>When heating a liquid in a test tube: point the mouth <strong>away from people</strong>, use a test tube holder, heat gently and intermittently, swirl to distribute heat evenly.</p>
+</div>
 
-<h3>6. SI Units</h3>
-<table>
-  <tr><th>Quantity</th><th>SI Base Unit</th><th>Symbol</th></tr>
-  <tr><td>Length</td><td>Metre</td><td>m</td></tr>
-  <tr><td>Mass</td><td>Kilogram</td><td>kg</td></tr>
-  <tr><td>Time</td><td>Second</td><td>s</td></tr>
-  <tr><td>Temperature</td><td>Kelvin</td><td>K</td></tr>
-  <tr><td>Electric current</td><td>Ampere</td><td>A</td></tr>
-</table>
-<p>Key conversions: 1 km = 1 000 m = 100 000 cm = 1 000 000 mm · 1 kg = 1 000 g = 1 000 000 mg · 1 m³ = 1 000 000 cm³ · 1 L = 1 000 cm³ = 1 000 mL</p>
-<p>Prefixes: kilo (k) = 10³ · centi (c) = 10⁻² · milli (m) = 10⁻³ · micro (µ) = 10⁻⁶</p>
+<div class="notes-card">
+  <h3>6. SI Units &amp; Conversions</h3>
+  <table>
+    <tr><th>Quantity</th><th>SI Base Unit</th><th>Symbol</th></tr>
+    <tr><td>Length</td><td>Metre</td><td>m</td></tr>
+    <tr><td>Mass</td><td>Kilogram</td><td>kg</td></tr>
+    <tr><td>Time</td><td>Second</td><td>s</td></tr>
+    <tr><td>Temperature</td><td>Kelvin</td><td>K</td></tr>
+    <tr><td>Electric current</td><td>Ampere</td><td>A</td></tr>
+  </table>
+  <div class="example">
+    <strong>Key conversions:</strong><br>
+    1 km = 1 000 m = 100 000 cm = 1 000 000 mm<br>
+    1 kg = 1 000 g = 1 000 000 mg<br>
+    1 m³ = 1 000 000 cm³ &nbsp;·&nbsp; 1 L = 1 000 cm³<br>
+    Prefixes: kilo (k) = 10³ · centi (c) = 10⁻² · milli (m) = 10⁻³ · micro (µ) = 10⁻⁶
+  </div>
+</div>
 
-<h3>7. Measuring Volume</h3>
-<ul>
-  <li>Regular solids: use the appropriate formula (e.g., V = l × w × h for a cuboid; V = l³ for a cube).</li>
-  <li>Irregular solids: <strong>water displacement method</strong> — Volume = V₂ − V₁.</li>
-  <li>Liquids: measuring cylinder — read the <strong>bottom of the meniscus</strong> at eye level.</li>
-</ul>
+<div class="notes-card">
+  <h3>7. Measuring Volume</h3>
+  <ul>
+    <li><strong>Regular solids</strong>: use formula — cuboid: V = l × w × h; cube: V = l³.</li>
+    <li><strong>Irregular solids</strong>: <strong>water displacement method</strong> — V<sub>solid</sub> = V₂ − V₁.</li>
+    <li><strong>Liquids</strong>: measuring cylinder — read the <strong>bottom of the meniscus</strong> at eye level on a flat surface.</li>
+  </ul>
+</div>
 
-<h3>8. Speed</h3>
-<p><strong>Speed = Distance ÷ Time</strong> (v = d/t)</p>
-<p>Units: m/s (SI) or km/h. On a distance-time graph, the gradient = speed.</p>
+<div class="notes-card">
+  <h3>8. Speed</h3>
+  <div class="formula">Speed = Distance ÷ Time &nbsp; (v = d / t)</div>
+  <ul>
+    <li>SI unit: <strong>m/s</strong>. Also used: km/h.</li>
+    <li>On a distance-time graph, the <strong>gradient = speed</strong>.</li>
+    <li>Rearrangements: Distance = Speed × Time &nbsp;·&nbsp; Time = Distance ÷ Speed.</li>
+  </ul>
+</div>
 `
 
 export const questions = [

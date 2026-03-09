@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { getData } from '../../storage'
+import AppHeader from '../ui/AppHeader'
 import HistoryModal from '../ui/HistoryModal'
 import TopicChat from '../ui/TopicChat'
 
-export default function TopicDetail({ topic, profile, subject, accent, onStartQuiz, onBack }) {
+export default function TopicDetail({ topic, profile, subject, accent, onStartQuiz, onBack, onSwitchProfile }) {
   const [showHistory, setShowHistory] = useState(false)
   const { meta, notes, questions } = topic
 
@@ -12,24 +13,19 @@ export default function TopicDetail({ topic, profile, subject, accent, onStartQu
   const history = data.history[tid] || []
   const bestScore = data.scores[tid]
   const hasAttempts = history.length > 0
-  const display = profile.charAt(0).toUpperCase() + profile.slice(1)
 
   return (
     <div style={{ '--accent': accent }}>
-      <header className="app-header">
-        <div className="logo">
-          {subject.title} <span>/ {subject.subtitle || 'Sec 1 G3'}</span>
-        </div>
-        <div className="header-right">
-          <div className="profile-badge">
-            <div className="avatar" style={{ background: accent }}>{display[0]}</div>
-            <span>{display}</span>
-          </div>
-        </div>
-      </header>
+      <AppHeader
+        onBack={onBack}
+        backLabel="Topics"
+        title={subject.title}
+        subtitle={subject.subtitle || 'Sec 1 G3'}
+        profile={profile}
+        accent={accent}
+        onSwitchProfile={onSwitchProfile}
+      />
       <div className="topic-view">
-        <button className="breadcrumb" onClick={onBack}>← Back to Topics</button>
-
         {notes ? (
           <div dangerouslySetInnerHTML={{ __html: notes }} />
         ) : (

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { getData, mergeRemoteScores } from '../../storage'
 import { fetchScores } from '../../api'
+import AppHeader from '../ui/AppHeader'
 import TopicCard from '../ui/TopicCard'
 
-export default function Dashboard({ profile, subject, accent, onSelectTopic, onSwitchProfile }) {
+export default function Dashboard({ profile, subject, accent, onSelectTopic, onBack, onSwitchProfile }) {
   const [scores, setScores] = useState({})
 
   function loadLocal() {
@@ -34,15 +35,15 @@ export default function Dashboard({ profile, subject, accent, onSelectTopic, onS
 
   return (
     <div style={{ '--accent': accent }}>
-      <header className="app-header">
-        <div className="logo">{subject.title} <span>/ {subject.subtitle || 'Sec 1 G3'}</span></div>
-        <div className="header-right">
-          <div className="profile-badge" onClick={onSwitchProfile}>
-            <div className="avatar" style={{ background: accent }}>{display[0]}</div>
-            <span>{display}</span>
-          </div>
-        </div>
-      </header>
+      <AppHeader
+        onBack={onBack}
+        backLabel="Subjects"
+        title={subject.title}
+        subtitle={subject.subtitle || 'Sec 1 G3'}
+        profile={profile}
+        accent={accent}
+        onSwitchProfile={onSwitchProfile}
+      />
       <div className="dashboard">
         <div className="dash-header">
           <h2>Welcome back, {display}!</h2>
@@ -69,7 +70,7 @@ export default function Dashboard({ profile, subject, accent, onSelectTopic, onS
 
         {sem1.length > 0 && (
           <>
-            <div className="semester-label">Semester 1 – Number &amp; Algebra</div>
+            <div className="semester-label">Semester 1</div>
             <div className="topics-grid">
               {sem1.map(t => (
                 <TopicCard
@@ -86,7 +87,7 @@ export default function Dashboard({ profile, subject, accent, onSelectTopic, onS
 
         {sem2.length > 0 && (
           <>
-            <div className="semester-label">Semester 2 – Geometry, Measurement &amp; Statistics</div>
+            <div className="semester-label">Semester 2</div>
             <div className="topics-grid">
               {sem2.map(t => (
                 <TopicCard

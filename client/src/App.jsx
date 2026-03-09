@@ -64,12 +64,18 @@ export default function App() {
     setScreen('profile')
   }
 
+  function goToSubjects() {
+    setSubject(null)
+    setTopicMod(null)
+    setScreen('subjects')
+  }
+
   return (
     <>
       {screen === 'profile' && (
         <ProfileSelect onSelect={selectProfile} />
       )}
-      {screen === 'subjects' && subject === null && (
+      {screen === 'subjects' && (
         <SubjectSelect
           subjects={subjects}
           profile={profile}
@@ -84,6 +90,7 @@ export default function App() {
           subject={subject}
           accent={accent}
           onSelectTopic={selectTopic}
+          onBack={subjects.length > 1 ? goToSubjects : switchProfile}
           onSwitchProfile={switchProfile}
         />
       )}
@@ -95,6 +102,7 @@ export default function App() {
           accent={accent}
           onStartQuiz={startQuiz}
           onBack={() => setScreen('dashboard')}
+          onSwitchProfile={switchProfile}
         />
       )}
       {screen === 'quiz' && quizState && (
@@ -102,6 +110,7 @@ export default function App() {
           state={quizState}
           setState={setQuizState}
           topic={topicMod}
+          profile={profile}
           accent={accent}
           onFinish={finishQuiz}
           onExit={() => setScreen('topic')}
@@ -111,10 +120,12 @@ export default function App() {
         <QuizResult
           result={quizResult}
           topic={topicMod}
+          profile={profile}
           accent={accent}
           onRetry={startQuiz}
           onReviewNotes={() => setScreen('topic')}
           onBack={() => setScreen('dashboard')}
+          onSwitchProfile={switchProfile}
         />
       )}
     </>

@@ -1,10 +1,17 @@
+import AppHeader from '../ui/AppHeader'
+
 export default function SubjectSelect({ subjects, profile, accent, onSelect, onBack }) {
-  const display = profile.charAt(0).toUpperCase() + profile.slice(1)
   return (
     <div style={{ '--accent': accent }}>
+      <AppHeader
+        onBack={onBack}
+        backLabel="Switch Student"
+        profile={profile}
+        accent={accent}
+      />
       <div className="subject-screen">
-        <h2>Hi, {display}!</h2>
-        <p className="sub">Choose a subject to study</p>
+        <h2>Choose a subject</h2>
+        <p className="sub">What do you want to study today?</p>
         <div className="subject-cards">
           {subjects.map(sub => (
             <div key={sub.id} className="subject-card" onClick={() => onSelect(sub)}>
@@ -14,7 +21,6 @@ export default function SubjectSelect({ subjects, profile, accent, onSelect, onB
             </div>
           ))}
         </div>
-        <button className="breadcrumb" style={{ marginTop: 32 }} onClick={onBack}>← Back</button>
       </div>
     </div>
   )

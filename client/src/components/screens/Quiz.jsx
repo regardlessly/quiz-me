@@ -1,8 +1,9 @@
 import { useState } from 'react'
+import AppHeader from '../ui/AppHeader'
 
 const LETTERS = ['A', 'B', 'C', 'D']
 
-export default function Quiz({ state, setState, topic, accent, onFinish, onExit }) {
+export default function Quiz({ state, setState, topic, profile, accent, onFinish, onExit }) {
   const { questions, currentQ, answers } = state
   const [submitting, setSubmitting] = useState(false)
   const q = questions[currentQ]
@@ -20,7 +21,7 @@ export default function Quiz({ state, setState, topic, accent, onFinish, onExit 
   function next() {
     if (!answered) return
     if (isLast) {
-      if (submitting) return          // block any second call
+      if (submitting) return
       setSubmitting(true)
       const score = answers.filter((a, i) => a === questions[i].ans).length
       onFinish(score, questions.length)
@@ -29,19 +30,17 @@ export default function Quiz({ state, setState, topic, accent, onFinish, onExit 
     }
   }
 
-  function confirmExit() {
-    if (window.confirm('Exit quiz? Your progress will be lost.')) onExit()
-  }
-
-  const display = topic.meta.title
-
   return (
     <div style={{ '--accent': accent }}>
-      <header className="app-header">
-        <div className="logo">{display}</div>
-      </header>
+      <AppHeader
+        onBack={onExit}
+        backLabel="Exit Quiz"
+        confirmBack="Exit quiz? Your progress will be lost."
+        title={topic.meta.title}
+        profile={profile}
+        accent={accent}
+      />
       <div className="quiz-view">
-        <button className="breadcrumb" onClick={confirmExit}>← Exit Quiz</button>
         <div className="quiz-progress">
           <div className="quiz-progress-bar">
             <div
@@ -84,7 +83,7 @@ export default function Quiz({ state, setState, topic, accent, onFinish, onExit 
             onClick={next}
             disabled={!answered || submitting}
           >
-            {isLast ? 'Submit' : 'Next'}
+            {isLast ? 'Submit' : 'Next →'}
           </button>
         </div>
       </div>

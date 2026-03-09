@@ -1,4 +1,6 @@
-export default function QuizResult({ result, topic, accent, onRetry, onReviewNotes, onBack }) {
+import AppHeader from '../ui/AppHeader'
+
+export default function QuizResult({ result, topic, profile, accent, onRetry, onReviewNotes, onBack, onSwitchProfile }) {
   const { score, total } = result
   const pct = Math.round(score / total * 100)
 
@@ -13,10 +15,13 @@ export default function QuizResult({ result, topic, accent, onRetry, onReviewNot
     : `You got ${score} out of ${total} — don't give up!`
 
   return (
-    <div>
-      <header className="app-header">
-        <div className="logo">Quiz Complete</div>
-      </header>
+    <div style={{ '--accent': accent }}>
+      <AppHeader
+        title="Quiz Complete"
+        profile={profile}
+        accent={accent}
+        onSwitchProfile={onSwitchProfile}
+      />
       <div className="results-view">
         <div className="results-circle" style={{ borderColor: color, color }}>
           <div className="score-big">{score}</div>
@@ -26,7 +31,7 @@ export default function QuizResult({ result, topic, accent, onRetry, onReviewNot
         <div className="results-sub">{sub} ({pct}%)</div>
         <div className="results-actions">
           <button
-            style={{ background: accent, color: '#fff' }}
+            style={{ background: accent, color: '#000' }}
             onClick={onRetry}
           >
             Try Again
